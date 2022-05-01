@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>圆 - 画柠檬</title>
+    <script src="https://unpkg.com/vue@next"></script>
+    <style>
+        #app {
+            text-align: center;
+        }
+
+        #canvas-container {
+            display: flex;
+            justify-content: center;
+        }
+
+        #canvas {
+            border: 1px solid rgba(110, 110, 110, 0.8);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <div id="canvas-container">
+        <canvas id="canvas" width="300" height="300">Your browser version is too late.</canvas>
+    </div>
+    <input v-model="num" v-on:input="onInput" type="number" placeholder="请输入条数"/>
+</div>
+<script type="text/javascript">
+    Vue.createApp({
+        data() {
+            return {
+                canvas: null,
+                ctx: null,
+                num: 2,
+                radius: 100,
+                arcX: 150,
+                arcY: 150,
+            };
+        },
+        methods: {
+            onInput() {
+                if (this.num < 2) {
+                    this.num = 2;
+                } else {
+                    this.canvas.width = 300;
+                    this.drawArc();
+                    this.drawHalfArcLine(this.arcX, this.num, this.radius);
+                }
+            },
+            // 画线
+            drawLine(originX, originY, toX, toY) {
+                this.ctx.beginPath();
+                this.ctx.lineWidth = 3;
+                this.ctx.moveTo(originX, originY);
+                this.ctx.lineTo(toX, toY);
+                this.ctx.strokeStyle = 'white';
+                this.ctx.stroke();
+                this.ctx.closePath();
+            },
+            // 画圆线
+            drawHalfArcLine(length, num, radius) {
+                let angleACB = (Math.PI / 2) / num;
+                this.drawLine(length, length - radius, length, length + radius);
+                for (let i = 0; i < num - 1; i++) {
+                    let angleBAC = Math.PI - (Math.PI / 2) - angleACB;
+                    let edgeAB = Math.sin(angleACB) * radius;
+                    let edgeBC = Math.sin(angleBAC) * radius;
+
+                    let x1 = length + edgeAB;
+                    let y1 = length - edgeBC;
+                    let x2 = length - edgeAB;
+                    let y2 = y1;
+
+                    this.drawLine(length, length, x1, y1);
+                    this.drawLine(length, length, x2, y2);
+                    angleACB = angleACB + angleACB;
+                }
+                this.drawLine(length - radius, length, length + radius, length);
+            },
+            // 画圆
+            drawArc() {
+                this.ctx.beginPath();
+                this.ctx.arc(this.arcX, this.arcY, this.radius + 4, 0, Math.PI * 2, true);
+                this.ctx.fillStyle = 'gold';
+                this.ctx.fill();
+                this.ctx.lineWidth = 6;
+                this.ctx.strokeStyle = 'green';
+                this.ctx.stroke();
+                this.ctx.closePath();
+            }
+        },
+        mounted() {
+            this.canvas = document.getElementById('canvas');
+            this.ctx = this.canvas.getContext('2d');
+            this.drawArc();
+            this.drawHalfArcLine(this.arcX, this.num, this.radius);
+        },
+
+    }).mount('#app');
+</script>
+</body>
+</html>
