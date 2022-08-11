@@ -81,7 +81,7 @@ onMounted(() => {
     </div>
     <div class="control-wrapper">
       <div class="control">
-        <div class="left">
+        <div class="right">
           <img @click="methods.onclickLeft" src="../../assets/icons/left.svg" alt="">
         </div>
         <div class="stop-or-play">
