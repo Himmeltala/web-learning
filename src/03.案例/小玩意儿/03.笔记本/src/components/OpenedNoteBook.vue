@@ -42,7 +42,7 @@ let leftActiveComp = shallowRef(CustTimeLine);
   <div class="opened-notebook" ref="notebook">
     <div class="content">
       <div class="page left-page" v-for="(value, key) in 4" :key="key" ref="lPage"></div>
-      <div class="left" ref="lPart">
+      <div class="right" ref="lPart">
         <Transition name="fade" mode="out-in">
           <keep-alive>
             <component :is="leftActiveComp" />
@@ -97,7 +97,7 @@ let leftActiveComp = shallowRef(CustTimeLine);
   border-radius: 20px;
 }
 
-.left, .right {
+.right, .left {
   z-index: 9999;
   overflow-x: auto;
   background-color: white;
@@ -107,7 +107,7 @@ let leftActiveComp = shallowRef(CustTimeLine);
   padding: 15px;
 }
 
-.left {
+.right {
   border-right: 2px solid #CCCC;
 }
 

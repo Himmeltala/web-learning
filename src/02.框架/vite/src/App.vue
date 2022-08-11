@@ -20,44 +20,60 @@ socket.on("transfer", (e) => {
 });
 
 function send() {
-  let standard = new ChatRoomStandard(username.value, message.value, avatarUrl.value, popupColor.value);
-  msgList.value.push(standard);
+  let standard = new ChatRoomStandard(username.value, message.value, avatarUrl.value, popupColor.value, "others");
   socket.emit("to-server", standard);
   message.value = "";
+  standard.type = "self";
+  msgList.value.push(standard);
+}
+
+function changeText(e) {
+  message.value = e.target.innerText;
 }
 </script>
 
 <template>
-  <div class="app">
-    <div class="config">
-      <div class="item username">
-        <div class="label">用户名</div>
-        <el-input v-model="username"></el-input>
-      </div>
-      <div class="item avatar">
-        <div class="label">头像</div>
-        <el-input v-model="avatarUrl"></el-input>
-      </div>
-      <div class="item popup-color">
-        <div class="label">气泡色</div>
-        <el-input v-model="popupColor"></el-input>
-      </div>
-    </div>
+  <div class="chatroom">
     <div class="wrap">
-      <div class="identifier">Your identifier: {{ identifier }}</div>
-      <div class="message-list">
-        <div class="msg-item others" :class="'item-' + key" v-for="(value, key) in msgList" :key="key">
-          <div class="right"><img class="avatar" :src="value._avatar" alt="oops!" /></div>
-          <div class="left">
-            <div class="msg-holder">{{ value._username }}</div>
-            <div class="msg-popup" :style="{'--popup-color': value._popupColor}">{{ value._message }}</div>
-          </div>
+      <div class="config">
+        <div class="item username">
+          <div class="label">用户名</div>
+          <el-input v-model="username"></el-input>
+        </div>
+        <div class="item avatar">
+          <div class="label">头像</div>
+          <el-input v-model="avatarUrl"></el-input>
+        </div>
+        <div class="item popup-color">
+          <div class="label">气泡色</div>
+          <el-input v-model="popupColor"></el-input>
         </div>
       </div>
-      <div class="chat-menu">
-        <div class="send-menu">
-          <el-input class="msg-input" v-model="message"></el-input>
-          <el-button class="send-btn" @click="send">Send</el-button>
+      <div class="content">
+        <div class="identifier">Your identifier: {{ identifier }}</div>
+        <div class="message-list">
+          <div class="msg-item" :class="value._type" v-for="(value, key) in msgList" :key="key">
+            <template v-if="value._type === 'self'">
+              <div class="left">
+                <div class="msg-holder">{{ value._username }}</div>
+                <div class="msg-popup" :style="{'--popup-color': value._popupColor}">{{ value._message }}</div>
+              </div>
+              <div class="right"><img class="avatar" :src="value._avatar" alt="oops!" /></div>
+            </template>
+            <template v-else>
+              <div class="left"><img class="avatar" :src="value._avatar" alt="oops!" /></div>
+              <div class="right">
+                <div class="msg-holder">{{ value._username }}</div>
+                <div class="msg-popup" :style="{'--popup-color': value._popupColor}">{{ value._message }}</div>
+              </div>
+            </template>
+          </div>
+        </div>
+        <div class="chat-menu">
+          <div class="send-menu">
+            <div contenteditable="true" class="msg-input" v-text="message" @input="changeText"></div>
+            <el-button class="send-btn" @click="send">发送</el-button>
+          </div>
         </div>
       </div>
     </div>
@@ -65,9 +81,17 @@ function send() {
 </template>
 
 <style scoped>
-.app {
+.chatroom {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.wrap {
+  background-color: white;
   color: #4D4949;
-  margin: 0 auto;
   width: 800px;
   height: 580px;
   display: flex;
@@ -77,10 +101,16 @@ function send() {
 }
 
 .config {
+  box-sizing: border-box;
   height: 100%;
-  padding: 0 10px;
+  padding: 10px 10px;
   border-radius: 4px;
-  border: 1px solid #CCCCCC;
+  border-left-width: 1px;
+  border-top-width: 1px;
+  border-bottom-width: 1px;
+  border-right-width: 0;
+  border-color: #E9E9E9;
+  border-style: solid;
   width: 30%;
 }
 
@@ -92,10 +122,11 @@ function send() {
   margin-bottom: 5px;
 }
 
-.wrap {
+.content {
+  box-sizing: border-box;
   height: 100%;
   width: 70%;
-  border: 1px solid #CCCCCC;
+  border: 1px solid #E9E9E9;
   border-radius: 4px;
 }
 
@@ -104,32 +135,54 @@ function send() {
   align-items: center;
   align-content: center;
   justify-content: center;
-  height: 50px;
-  background-color: #F4F4F4;
+  height: 7%;
+  background-color: #F9F9F9;
 }
 
 .message-list {
-  height: 500px;
+  width: 100%;
+  height: 80%;
   overflow-x: auto;
 }
 
 .message-list .msg-item {
   display: flex;
   margin-top: 20px;
+}
+
+.message-list .self {
+  justify-content: flex-end;
+}
+
+.message-list .others.msg-item {
   padding-right: 50px;
   padding-left: 20px;
 }
 
-.message-list .right {
+.message-list .self.msg-item {
+  padding-right: 20px;
+  padding-left: 50px;
+}
+
+.message-list .others .left {
   margin-right: 20px;
-  width: 10%;
+  width: 12%;
   display: flex;
   align-content: center;
   justify-content: center;
   align-items: flex-start;
 }
 
-.message-list .left .msg-popup {
+.message-list .self .right {
+  margin-left: 20px;
+  width: 12%;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.message-list .msg-popup {
   width: auto;
   margin-top: 5px;
   background-color: var(--popup-color);
@@ -141,13 +194,23 @@ function send() {
   position: relative;
 }
 
-.message-list .left .msg-popup::before {
+.message-list .others .msg-popup::before {
   position: absolute;
   content: "";
   top: 10px;
   left: -10px;
   border-top: 2px solid transparent;
   border-right: 12px solid var(--popup-color);
+  border-bottom: 10px solid transparent;
+}
+
+.message-list .self .msg-popup::after {
+  position: absolute;
+  content: "";
+  top: 10px;
+  right: -10px;
+  border-top: 2px solid transparent;
+  border-left: 12px solid var(--popup-color);
   border-bottom: 10px solid transparent;
 }
 
@@ -158,10 +221,42 @@ function send() {
   margin-top: 10px;
 }
 
+.chat-menu {
+  height: 13%;
+}
+
 .send-menu {
+  width: 100%;
+  height: 100%;
   display: flex;
   justify-content: space-between;
   align-content: center;
   align-items: center;
+}
+
+.send-menu .msg-input {
+  box-sizing: border-box;
+  padding: 4px;
+  outline: none;
+  height: 100%;
+  width: 100%;
+  border: 1px solid #E9E9E9;
+  border-radius: 4px;
+  caret-color: #9B9191;
+  overflow-x: auto;
+  transition: 0.6s;
+}
+
+.send-menu .msg-input:hover {
+  border-color: #D0CBCB;
+}
+
+.send-menu .msg-input:focus {
+  transition: 0.6s;
+  border-color: #409EFF;
+}
+
+.send-menu .send-btn {
+  height: 100%;
 }
 </style>
