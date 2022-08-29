@@ -6,8 +6,8 @@ const server = new Server({
   }
 });
 
-server.on("connection", (socket) => {
-  socket.on("to-server", (e) => {
+server.on("connection", socket => {
+  socket.on("to-server", e => {
     socket.broadcast.emit("transfer", e);
   });
 });
