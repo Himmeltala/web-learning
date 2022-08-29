@@ -8,7 +8,7 @@ interface IUser3 {
 
 let user: IUser3 = {
   name: "小明",
-  age: 22,
+  age: 22
 };
 
 // user.name = "大明"; // 不可以再次更改

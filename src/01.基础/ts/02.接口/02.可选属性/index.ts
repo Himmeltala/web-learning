@@ -12,6 +12,6 @@ function getUser2(userObj: IUser2): IUser2 {
 
 console.log(
   getUser2({
-    name: "小明",
+    name: "小明"
   })
 );
