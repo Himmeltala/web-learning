@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JSON.stringify</title>
+  </head>
+  <body>
+    <script>
+      function exclude(obj, exc) {
+        for (let i in exc) {
+          delete obj[exc[i]];
+        }
+        return Object.keys(obj);
+      }
+
+      let obj = { age: 10, name: "XiaoMing", school: "希望小学", address: "北京市朝阳区xxx号" };
+
+      let json = JSON.stringify(obj, exclude(obj, ["age", "address"]), 2);
+      console.log(json);
+    </script>
+  </body>
+</html>
