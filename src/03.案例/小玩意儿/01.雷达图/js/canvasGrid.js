@@ -7,7 +7,7 @@ function drawGrid(canvasW, canvasH, step) {
 function drawGridX(step, canvasH) {
   let horizontalX = 0;
   let gridX = new Path2D();
-  for ( let i = 0; i < canvasH / step; i++ ) {
+  for (let i = 0; i < canvasH / step; i++) {
     horizontalX += step;
     gridX.moveTo(horizontalX, 0);
     gridX.lineTo(horizontalX, canvasH);
@@ -18,7 +18,7 @@ function drawGridX(step, canvasH) {
 function drawGridY(step, canvasW) {
   let verticalY = 0;
   let gridY = new Path2D();
-  for ( let i = 0; i < canvasW / step; i++ ) {
+  for (let i = 0; i < canvasW / step; i++) {
     verticalY += step;
     gridY.moveTo(0, verticalY);
     gridY.lineTo(canvasW, verticalY);
