@@ -19,11 +19,12 @@ li {
 }
 
 .tree-ocx-tip:hover {
-  transition: .5s;
+  transition: 0.5s;
   background-color: rgba(234, 234, 234, 0.7);
 }
 
-.fold-icon, .unfold-icon {
+.fold-icon,
+.unfold-icon {
   margin-right: 8px;
 }
 
@@ -52,7 +53,7 @@ li {
 }
 
 .tree-ocx-li-enable-fold-active {
-  animation: tree-ocx-li-fold-animation .5s ease-in-out 0s;
+  animation: tree-ocx-li-fold-animation 0.5s ease-in-out 0s;
 }
 
 @keyframes tree-ocx-li-fold-animation {
@@ -66,7 +67,7 @@ li {
 }
 
 .tree-ocx-li-unfold-active {
-  animation: tree-ocx-li-unfold-animation .5s ease-in-out 0s;
+  animation: tree-ocx-li-unfold-animation 0.5s ease-in-out 0s;
 }
 
 @keyframes tree-ocx-li-unfold-animation {

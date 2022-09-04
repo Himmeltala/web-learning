@@ -29,7 +29,7 @@ div#app {
   flex-direction: row;
   flex-wrap: nowrap;
   box-sizing: border-box;
-  background-color: #00B7FF;
+  background-color: #00b7ff;
   height: inherit;
   width: inherit;
   position: fixed;
@@ -45,7 +45,7 @@ div#app {
 
 .aside-wrap .content {
   border-radius: 4px;
-  background-color: #7979DE;
+  background-color: #7979de;
   width: 90px;
   height: 1000px;
 }
@@ -65,7 +65,7 @@ div#app {
   height: auto;
   border-radius: 4px;
   box-sizing: border-box;
-  background-color: #AAAAAA;
+  background-color: #aaaaaa;
 }
 
 .middle .header,
@@ -87,7 +87,7 @@ div#app {
   box-sizing: border-box;
   position: fixed;
   top: 0;
-  background-color: #C4A0CC;
+  background-color: #c4a0cc;
 }
 
 .middle .content-wrap .main {

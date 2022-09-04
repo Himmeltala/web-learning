@@ -13,10 +13,7 @@ let treeOcxData = [
             child: [
               {
                 tip: "Vue.js",
-                child: [
-                  { tip: "组件" },
-                  { tip: "指令" }
-                ]
+                child: [{ tip: "组件" }, { tip: "指令" }]
               },
               { tip: "JavaScript" },
               { tip: "React.js" },
@@ -25,10 +22,7 @@ let treeOcxData = [
                 child: [
                   {
                     tip: "canvas",
-                    child: [
-                      { tip: "beginPath()" },
-                      { tip: "closePath()" }
-                    ]
+                    child: [{ tip: "beginPath()" }, { tip: "closePath()" }]
                   },
                   { tip: "Audio" }
                 ]
@@ -53,7 +47,7 @@ let treeOcxData = [
   },
   {
     tip: "导航",
-    child: [ { tip: "固钉" }, { tip: "回到顶部" }, { tip: "面包屑" } ]
+    child: [{ tip: "固钉" }, { tip: "回到顶部" }, { tip: "面包屑" }]
   },
   {
     tip: "数据展示"

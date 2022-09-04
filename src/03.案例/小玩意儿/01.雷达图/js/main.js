@@ -1,5 +1,4 @@
 class RadarMap {
-
   constructor(ctx, radar, dataArea, config) {
     this.ctx = ctx;
     this.radar = radar;
@@ -11,19 +10,19 @@ class RadarMap {
     let axis = [];
     let radius = this.radar.polygonPerStep;
 
-    if ( this.config ) {
+    if (this.config) {
       this.ctx.strokeStyle = this.config.radar.lineColor;
       this.ctx.lineWidth = this.config.radar.lineWidth;
     }
 
-    for ( let j = 0; j < this.radar.radarLayers; j++ ) {
+    for (let j = 0; j < this.radar.radarLayers; j++) {
       this.drawPolygon(radius, axis, j);
       radius = radius + this.radar.polygonPerStep;
     }
 
     this.drawStria(axis);
     return this.drawDataArea(axis);
-  };
+  }
 
   // 计算多边形点的x轴坐标
   calcPolygonX(radius, increaseAngle) {
@@ -43,14 +42,14 @@ class RadarMap {
    * @param currentPolygonLayer 当前多边形的层数
    */
   drawPolygon(radius, axis, currentPolygonLayer) {
-    let averageAngle = Math.PI * 2 / this.radar.radarMapTotalSides;
+    let averageAngle = (Math.PI * 2) / this.radar.radarMapTotalSides;
     let increaseAngle = 0;
     let targetX, targetY;
 
     this.ctx.beginPath();
     axis.push({ layer: currentPolygonLayer, coords: [] });
 
-    for ( let i = 0; i < this.radar.radarMapTotalSides; i++ ) {
+    for (let i = 0; i < this.radar.radarMapTotalSides; i++) {
       targetX = this.calcPolygonX(radius, increaseAngle);
       targetY = this.calcPolygonY(radius, increaseAngle);
       this.ctx.lineTo(targetX, targetY);
@@ -69,7 +68,7 @@ class RadarMap {
    */
   drawStria(axis) {
     let coords = axis[axis.length - 1].coords;
-    for ( let i = 0; i < this.radar.radarMapTotalSides; i++ ) {
+    for (let i = 0; i < this.radar.radarMapTotalSides; i++) {
       this.ctx.beginPath();
       this.ctx.moveTo(this.radar.radarX, this.radar.radarY);
       this.ctx.lineTo(coords[i].x, coords[i].y);
@@ -86,9 +85,9 @@ class RadarMap {
    * @param currentPoint 当前多边形的点的位置
    */
   drawPointText(axis, currentPoint) {
-    this.ctx.font = `${ this.config.radar.textSize }px Georgia`;
+    this.ctx.font = `${this.config.radar.textSize}px Georgia`;
     this.ctx.lineWidth = this.config.dataArea.lineWidth;
-    if ( axis[currentPoint].x <= this.radar.radarX ) {
+    if (axis[currentPoint].x <= this.radar.radarX) {
       this.ctx.textAlign = "right";
     } else {
       this.ctx.textAlign = "left";
@@ -103,7 +102,7 @@ class RadarMap {
    */
   drawDataAreaPoint(axis) {
     this.ctx.strokeStyle = "white";
-    for ( let i = 0; i < axis.length; i++ ) {
+    for (let i = 0; i < axis.length; i++) {
       this.ctx.beginPath();
       this.ctx.arc(axis[i].x, axis[i].y, 3, 0, Math.PI * 2);
       this.ctx.closePath();
@@ -122,7 +121,7 @@ class RadarMap {
    * @returns {*} 返回 x 坐标
    */
   calcDataAreaTopX(areaTopLayer, axis, currentPoint) {
-    if ( areaTopLayer < 0 ) {
+    if (areaTopLayer < 0) {
       return this.radar.radarX;
     } else {
       return axis[areaTopLayer].coords[currentPoint].x;
@@ -138,7 +137,7 @@ class RadarMap {
    * @returns {*} 返回 y 坐标
    */
   calcDataAreaTopY(areaTopLayer, axis, currentPoint) {
-    if ( areaTopLayer < 0 ) {
+    if (areaTopLayer < 0) {
       return this.radar.radarY;
     } else {
       return axis[areaTopLayer].coords[currentPoint].y;
@@ -155,7 +154,7 @@ class RadarMap {
   drawDataAreaTop(axis, currentPoint) {
     let x = this.calcDataAreaTopX(this.dataArea[currentPoint].star - 1, axis, currentPoint);
     let y = this.calcDataAreaTopY(this.dataArea[currentPoint].star - 1, axis, currentPoint);
-    if ( currentPoint === 0 ) {
+    if (currentPoint === 0) {
       ctx.moveTo(x, y);
     } else {
       ctx.lineTo(x, y);
@@ -171,7 +170,7 @@ class RadarMap {
   drawDataArea(axis) {
     let areaTopAxis = []; // 数据区域的所有点坐标
     this.ctx.beginPath();
-    for ( let i = 0; i < this.radar.radarMapTotalSides; i++ ) {
+    for (let i = 0; i < this.radar.radarMapTotalSides; i++) {
       let { x, y } = this.drawDataAreaTop(axis, i);
       areaTopAxis.push({ title: this.dataArea[i].title, star: this.dataArea[i].star, x: x, y: y });
     }
@@ -189,26 +188,26 @@ class RadarMap {
     let timeout = null;
     $("#radar-map").on({
       mousemove: function (e) {
-        if ( timeout != null ) clearTimeout(timeout);
+        if (timeout != null) clearTimeout(timeout);
         timeout = setTimeout(() => {
           axis.forEach((value, index) => {
-            if ( (value.x >= e.offsetX - 5 && value.x < e.offsetX + 5) && (value.y >= e.offsetY - 5 && value.y < e.offsetY + 5) ) {
+            if (value.x >= e.offsetX - 5 && value.x < e.offsetX + 5 && value.y >= e.offsetY - 5 && value.y < e.offsetY + 5) {
               $(floatingPanel).css({
-                "display": "block",
-                "left": `${ e.offsetX }px`,
-                "top": `${ e.offsetY }px`
+                display: "block",
+                left: `${e.offsetX}px`,
+                top: `${e.offsetY}px`
               });
               $(floatingPanel).empty().append(`
-                <div class="tech">技术：${ value.title }</div>
-                <div class="star">掌握程度：${ value.star } 颗星</div>
+                <div class="tech">技术：${value.title}</div>
+                <div class="star">掌握程度：${value.star} 颗星</div>
               `);
             }
           });
         }, 50);
       },
       mouseleave: function (e) {
-        $(floatingPanel).css({ "display": "none" });
+        $(floatingPanel).css({ display: "none" });
       }
     });
-  };
+  }
 }
