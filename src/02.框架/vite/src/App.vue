@@ -1,7 +1,7 @@
 <script setup></script>
 
 <template>
-  <div></div>
+  <div class="app"></div>
 </template>
 
 <style scoped></style>
