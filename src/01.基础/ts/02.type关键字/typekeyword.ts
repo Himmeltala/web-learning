@@ -5,9 +5,9 @@ interface Movement {
   run(): void;
 }
 
-type Animal = Movement & {
+type Animal = {
   name: string;
-};
+} & Movement;
 
 /**
  * type 可以被 interface 继承，但是 type 不可以继承 interface
