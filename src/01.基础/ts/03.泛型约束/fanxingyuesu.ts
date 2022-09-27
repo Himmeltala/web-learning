@@ -1,9 +1,6 @@
-type Length = { length: number };
-
-function calcArrayLength<T extends Length>(source: T): number {
-  return source.length;
+function prop<T extends object, K extends keyof T>(obj: T, key: K) {
+  return obj[key];
 }
 
-let l = calcArrayLength([1, 2, 3, 4]);
-
-console.log(l);
+let v = prop({ name: "大黄", age: 10 }, "name");
+console.log(v);
