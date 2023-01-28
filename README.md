@@ -21,13 +21,12 @@ uni-app 可以生成安卓应用，所以还可以了解 Flutter 框架来开发
 
 # Web 案例
 
-1. [雷达图](./03.examples/01.%E9%9B%B7%E8%BE%BE%E5%9B%BE)：熟悉 Canvas
-2. [Gitee 贡献图](./03.examples/02.Gitee%E8%B4%A1%E7%8C%AE%E5%9B%BE)：熟悉 JQuery、数组
-3. [树形控件](./03.examples/03.%E6%A0%91%E5%BD%A2%E6%8E%A7%E4%BB%B6)：熟悉递归函数
-4. [笔记本](./03.examples/04.%E7%AC%94%E8%AE%B0%E6%9C%AC)：熟悉 Vite+Vue3
-5. [横向滚动](./03.examples/05.%E6%A8%AA%E5%90%91%E6%BB%9A%E5%8A%A8)：熟悉事件源的各种属性
-
+1. [雷达图](./03.examples/01.%E9%9B%B7%E8%BE%BE%E5%9B%BE)
+2. [贡献图](./03.examples/02.Gitee%E8%B4%A1%E7%8C%AE%E5%9B%BE)
+3. [树形控件](./03.examples/03.%E6%A0%91%E5%BD%A2%E6%8E%A7%E4%BB%B6)
+4. [笔记本](./03.examples/04.%E7%AC%94%E8%AE%B0%E6%9C%AC)
+5. [横向滚动](./03.examples/05.%E6%A8%AA%E5%90%91%E6%BB%9A%E5%8A%A8)
    ...
 
-6. [随机抽人](./03.examples/09.%E9%9A%8F%E6%9C%BA%E6%8A%BD%E4%BA%BA)：熟悉使用 sheetJs
-7. [标签页](./03.examples/10.%E6%A0%87%E7%AD%BE%E9%A1%B5)：熟悉轮播图、transform：translateX。
+6. [随机抽人](./03.examples/09.%E9%9A%8F%E6%9C%BA%E6%8A%BD%E4%BA%BA)
+7. [标签页](./03.examples/10.%E6%A0%87%E7%AD%BE%E9%A1%B5)
