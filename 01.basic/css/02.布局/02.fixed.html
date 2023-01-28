@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fixed 布局</title>
+    <style>
+      .fixed {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100px;
+        height: 800px;
+        /* height: 100vh; */
+        background-color: aqua;
+        overflow: auto;
+      }
+
+      .container {
+        width: 90%;
+        height: 2000px;
+        background-color: blue;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="fixed">
+      <div class="container">
+        <p>1</p>
+        <p>2</p>
+        <p>3</p>
+        <p>4</p>
+        <p>5</p>
+        <p>6</p>
+        <p>7</p>
+      </div>
+    </div>
+  </body>
+</html>
