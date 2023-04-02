@@ -20,3 +20,48 @@ function handleInsert(newVal: IProductList) {
   setTrolleyList([...trolleyList, newVal]);
 }
 ```
+
+## state 快照机制
+
+函数组件的 state 不是类组件的异步更新，更不可能是同步更新，而是独有的快照更新。
+
+快照更新的意思是，不管 setXXX 多少次，都是基于那个时候的快照更新的，快照保留了那个时候的状态。
+
+```jsx
+export default function Counter() {
+  const [number, setNumber] = useState(0);
+
+  return (
+    <h1>{number}</h1>
+    <button onClick={() => {
+      setNumber(number + 5);
+      setTimeout(() => {
+        alert(number);
+      }, 3000);
+    }}>+5</button>
+  )
+}
+```
+
+number 按理来说已经是 5 了，那么 alert 弹出的结果也就是 5，实际上并不是这样。alert 弹出的结果是 0。
+
+打破这个快照机制，需要传递一个**状态更新函数**：
+
+```jsx
+export default function Counter() {
+  const [number, setNumber] = useState(0);
+
+  return (
+    <>
+      <h1>{number}</h1>
+      <button
+        onClick={() => {
+          setNumber(n => n + 5);
+          setNumber(n => n + 5);
+        }}>
+        +10
+      </button>
+    </>
+  );
+}
+```
