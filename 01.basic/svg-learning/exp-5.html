@@ -24,7 +24,7 @@
   </style>
 
   <body>
-    <svg id="svg" xmlns="http://www.w3.org/2000/svg" width="1300" height="400"></svg>
+    <svg id="svg" xmlns="http://www.w3.org/2000/svg" width="1300" height="600"></svg>
     <div style="margin-left: 10px">
       <div>
         <div>Rect 的初始 x</div>
@@ -54,7 +54,6 @@
     class BleuOnRect {
       constructor(svg) {
         this._svg = svg;
-        // 添加多个，不能只是一个
         this.callOnMouseMoveSVG = [];
       }
 
@@ -109,9 +108,7 @@
       onMouseMoveSVG = e => {
         const difX = this._clickX - this._lastX;
         const difY = this._clickY - this._lastY;
-        // _x 可以看作是真正的移动的 x 值，去除了鼠标而偏移
         this._x = e.offsetX - difX;
-        // _y 同上
         this._y = e.offsetY - difY;
         this._g.setAttribute("transform", `translate(${this._x}, ${this._y})`);
 
@@ -126,11 +123,6 @@
         this.callOnMouseMoveSVG.push(callback);
       };
 
-      /**
-       * 鼠标点击之后需要记录以下两个数据：
-       * 1. 记录本次点击的 offsetX 和 offsetY
-       * 2. 记录本次点击 rect 元素所在左上角的坐标，x 和 y
-       */
       onMouseDown = e => {
         this._lastX = this._x;
         this._lastY = this._y;
@@ -165,13 +157,24 @@
     }
 
     class BleuOnLink {
-      // 需要 svg 对象
       constructor(svg) {
         this._svg = svg;
+        this.isUp = false;
+        this.isDown = false;
+        this.isLeft = false;
+        this.isRight = false;
+        this.compensationX = 0;
+        this.compensationY = 0;
+        this.tolerant = 20;
+        this._g = null;
+        this._path = null;
+        this._source = null;
+        this._target = null;
+        this._sourceX = 0;
+        this._sourceY = 0;
         this.createPath();
       }
 
-      // 创建 path
       createPath = () => {
         this._g = document.createElementNS("http://www.w3.org/2000/svg", "g");
         this._path = document.createElementNS("http://www.w3.org/2000/svg", "path");
@@ -185,21 +188,18 @@
       source = value => {
         this._source = value;
         this._source.setOnMouseMoveSVG((x, y) => {
-          this._path.setAttribute(
-            "d",
-            `M${x + this._source.width},${y + this._source.height / 2} L${this._targetX},${this._targetY}`
-          );
-          this._sourceX = x + this._source.width;
-          this._sourceY = y + this._source.height / 2;
+          let sourceX = x + this.compensationX;
+          let sourceY = y + this.compensationY;
+          this._path.setAttribute("d", `M${sourceX},${sourceY} L${this._targetX},${this._targetY}`);
         });
       };
 
       target = value => {
         this._target = value;
         this._target.setOnMouseMoveSVG((x, y) => {
-          this._path.setAttribute("d", `M${this._sourceX},${this._sourceY} L${x},${y + this._target.height / 2}`);
           this._targetX = x;
           this._targetY = y + this._target.height / 2;
+          this._path.setAttribute("d", `M${this._sourceX},${this._sourceY} L${this._targetX},${this._targetY}`);
         });
 
         this.initPath();
@@ -214,6 +214,83 @@
 
         this._g.appendChild(this._path);
         this._svg.appendChild(this._g);
+        this.createEvent();
+      };
+
+      isUpArea = () => {
+        return (
+          this._source.x + this._source.width >= this._sourceX &&
+          this._source.x <= this._sourceX &&
+          this._source.y - this.tolerant <= this._sourceY &&
+          this._source.y + this.tolerant >= this._sourceY
+        );
+      };
+
+      isDownArea = () => {
+        return (
+          this._source.x + this._source.width >= this._sourceX &&
+          this._source.x <= this._sourceX &&
+          this._source.y + this._source.height - this.tolerant <= this._sourceY &&
+          this._source.y + this._source.height + this.tolerant >= this._sourceY
+        );
+      };
+
+      isLeftArea = () => {
+        return (
+          this._source.x + this.tolerant >= this._sourceX &&
+          this._source.x - this.tolerant <= this._sourceX &&
+          this._source.y <= this._sourceY &&
+          this._source.y + this._source.height >= this._sourceY
+        );
+      };
+
+      isRightArea = () => {
+        return (
+          this._source.x + this._source.width - this.tolerant <= this._sourceX &&
+          this._source.x + this._source.width + this.tolerant >= this._sourceX &&
+          this._source.y + this._source.height >= this._sourceY &&
+          this._source.y <= this._sourceY
+        );
+      };
+
+      compensate = e => {
+        if (this.isUpArea()) {
+          this.isUp = true;
+          this.compensationX = e.offsetX - this._source.x;
+          this.compensationY = 0;
+        } else if (this.isDownArea()) {
+          this.isDown = true;
+          this.compensationX = e.offsetX - this._source.x;
+          this.compensationY = this._source.height;
+        } else if (this.isLeftArea()) {
+          this.isLeft = true;
+          this.compensationX = 0;
+          this.compensationY = e.offsetY - this._source.y;
+        } else if (this.isRightArea()) {
+          this.isRight = true;
+          this.compensationX = this._source.width;
+          this.compensationY = e.offsetY - this._source.y;
+        }
+      };
+
+      onMouseMoveSVG = e => {
+        this._sourceX = e.offsetX;
+        this._sourceY = e.offsetY;
+        this._path.setAttribute("d", `M${this._sourceX},${this._sourceY} L${this._targetX},${this._targetY}`);
+      };
+
+      onMouseDown = e => {
+        this._svg.addEventListener("mousemove", this.onMouseMoveSVG);
+      };
+
+      onMouseUp = e => {
+        this.compensate(e);
+        this._svg.removeEventListener("mousemove", this.onMouseMoveSVG);
+      };
+
+      createEvent = () => {
+        this._path.addEventListener("mousedown", this.onMouseDown);
+        this._path.addEventListener("mouseup", this.onMouseUp);
       };
     }
 
@@ -249,18 +326,6 @@
     const link2 = new BleuOnLink(svg);
     link2.source(rect2);
     link2.target(rect3);
-
-    // rect3
-    const rect4 = new BleuOnRect(svg);
-    rect4.position(1000, 150);
-    rect4.resize(100, 100);
-    rect4.attr({ fill: "black" });
-    rect4.create();
-
-    // link3
-    const link3 = new BleuOnLink(svg);
-    link3.source(rect4);
-    link3.target(rect1);
   </script>
 
   <script>

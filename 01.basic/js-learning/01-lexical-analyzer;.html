@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>42020306-郑人滏</title>
+  </head>
+  <body>
+    <script>
+      // 定义词法分析器类
+      class Lexer {
+        constructor(input) {
+          this.input = input;
+          this.tokens = []; // 存储词法单元的数组
+          this.pos = 0; // 当前处理的位置
+          this.keywords = [
+            { key: "if", code: 1 },
+            { key: "then", code: 2 },
+            { key: "do", code: 3 },
+            { key: "while", code: 4 },
+            { key: "begin", code: 5 },
+            { key: "end", code: 6 },
+            { key: "+", code: 9 },
+            { key: "-", code: 10 },
+            { key: "*", code: 11 },
+            { key: "/", code: 12 },
+            { key: "=", code: 13 },
+            { key: ">", code: 14 },
+            { key: "<", code: 15 },
+            { key: ";", code: 16 },
+            { key: "(", code: 17 },
+            { key: ")", code: 18 },
+            { key: "{", code: 19 },
+            { key: "}", code: 20 }
+          ]; // 关键字列表
+        }
+
+        // 词法分析方法
+        analyze() {
+          while (this.pos < this.input.length) {
+            const char = this.input[this.pos];
+
+            // 根据当前字符的类型进行处理
+            if (this.isWhitespace(char)) {
+              this.skipWhitespace();
+            } else if (this.isLetter(char)) {
+              this.parseIdentifier();
+            } else if (this.isDigit(char)) {
+              this.parseNumber();
+            } else if (this.isOperator(char)) {
+              this.parseOperator();
+            } else {
+              if (this.isDelimiter(char)) {
+                const keywords = this.findKeywords(char);
+                this.tokens = [...this.tokens, ...keywords];
+              } else {
+                this.tokens.push(`(不合法符号, ${char})`);
+              }
+              this.pos++;
+            }
+          }
+
+          return this.tokens;
+        }
+
+        // 判断字符是否为操作符
+        isOperator(char) {
+          return /[+\-*/=><]/.test(char);
+        }
+
+        // 判断是否为界定符
+        isDelimiter(char) {
+          return /[;(){}]/.test(char);
+        }
+        // 判断字符是否为空白字符
+        isWhitespace(char) {
+          return /\s/.test(char);
+        }
+
+        // 判断字符是否为字母
+        isLetter(char) {
+          return /[a-zA-Z]/.test(char);
+        }
+
+        // 判断字符是否为数字
+        isDigit(char) {
+          return /[0-9]/.test(char);
+        }
+
+        // 跳过空白字符
+        skipWhitespace() {
+          while (this.pos < this.input.length && this.isWhitespace(this.input[this.pos])) {
+            this.pos++;
+          }
+        }
+
+        // 查找是否为 keywords 列表中的关键字
+        findKeywords = maybeKeyword => {
+          let isKeywords = [];
+          this.keywords.find(value => {
+            if (value.key === maybeKeyword) {
+              isKeywords.push(`(${value.code}, ${value.key})`);
+            }
+          });
+          return isKeywords;
+        };
+
+        // 解析标识符
+        parseIdentifier() {
+          let identifier = "";
+
+          while (this.pos < this.input.length && this.isLetter(this.input[this.pos])) {
+            identifier += this.input[this.pos];
+            this.pos++;
+          }
+
+          const keywords = this.findKeywords(identifier);
+          this.tokens = [...this.tokens, ...keywords];
+        }
+
+        // 解析数字
+        parseNumber() {
+          let number = "";
+
+          while (this.pos < this.input.length && this.isDigit(this.input[this.pos])) {
+            number += this.input[this.pos];
+            this.pos++;
+          }
+
+          this.tokens.push(`(8, ${number})`);
+        }
+
+        // 解析操作符
+        parseOperator() {
+          const operator = this.input[this.pos];
+          const keywords = this.findKeywords(operator);
+          this.tokens = [...this.tokens, ...keywords];
+          this.pos++;
+        }
+      }
+
+      const code = `if i > 0 i = i + 5; then &100;`;
+      const code2 = `if (i > 0) { i = i + 5; return i; } else { return $100; }`;
+      const tokens = new Lexer(code).analyze();
+      const tokens2 = new Lexer(code2).analyze();
+      console.log(tokens);
+      console.log(tokens2);
+    </script>
+  </body>
+</html>
