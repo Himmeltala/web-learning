@@ -191,7 +191,12 @@ class RadarMap {
         if (timeout != null) clearTimeout(timeout);
         timeout = setTimeout(() => {
           axis.forEach((value, index) => {
-            if (value.x >= e.offsetX - 5 && value.x < e.offsetX + 5 && value.y >= e.offsetY - 5 && value.y < e.offsetY + 5) {
+            if (
+              value.x >= e.offsetX - 5 &&
+              value.x < e.offsetX + 5 &&
+              value.y >= e.offsetY - 5 &&
+              value.y < e.offsetY + 5
+            ) {
               $(floatingPanel).css({
                 display: "block",
                 left: `${e.offsetX}px`,

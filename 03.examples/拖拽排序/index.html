@@ -125,7 +125,10 @@
           // let tempTargetGridVals = gridVals[currRowIndex][currColIndex];
           // gridVals[currRowIndex][currColIndex] = gridVals[rowIndex][colIndex];
           // gridVals[rowIndex][colIndex] = tempTargetGridVals;
-          [gridVals[currRowIndex][currColIndex], gridVals[rowIndex][colIndex]] = [gridVals[rowIndex][colIndex], gridVals[currRowIndex][currColIndex]];
+          [gridVals[currRowIndex][currColIndex], gridVals[rowIndex][colIndex]] = [
+            gridVals[rowIndex][colIndex],
+            gridVals[currRowIndex][currColIndex]
+          ];
         });
 
         // 必须写这一段代码，否则 drop 监听器不生效

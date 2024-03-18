@@ -1,12 +1,7 @@
-<script setup lang="ts">
-import { ref } from "vue";
-import Test from "./components/Test.vue";
-
-const state = ref(0);
-</script>
+<script setup lang="ts"></script>
 
 <template>
-  <Test />
+  <div class="username">Himmelbleu</div>
 </template>
 
-<style scoped></style>
+<style scoped lang="scss"></style>

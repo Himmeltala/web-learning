@@ -5,7 +5,7 @@
 .collapse {
   margin: 10px 0;
   border-radius: 5px;
-  border: 1px solid #AAAAAA;
+  border: 1px solid #aaaaaa;
   padding: 10px;
 }
 
@@ -36,7 +36,7 @@
 .collapse > .unfold-collapse {
   display: block !important;
   margin-top: 5px;
-  border-top: 1px solid #CCCCCC;
+  border-top: 1px solid #cccccc;
   padding-top: 10px;
   padding-bottom: 10px;
 }
