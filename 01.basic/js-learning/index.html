@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      const person = {
+        address: {
+          city: "New York"
+        },
+        one: { two: { three: "one-two-three" } }
+      };
+
+      function getProperty(obj, path) {
+        let propertyValue = obj;
+        for (let i = 0; i < path.length; i++) {
+          const propertyName = path[i];
+          propertyValue = propertyValue[propertyName];
+        }
+        return propertyValue;
+      }
+
+      console.log(getProperty(person, ["address", "city"]));
+      console.log(getProperty(person, ["one", "two", "three"]));
+    </script>
+  </body>
+</html>
