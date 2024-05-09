@@ -17,10 +17,6 @@
 <body>
 <div>
   <div style="margin-bottom: 20px">
-    <button id="import-btn">导入</button>
-    <button id="export-btn">导出</button>
-  </div>
-  <div style="margin-bottom: 20px">
     <button id="save-barrier-btn">保存本关卡</button>
     <button id="reset-barrier-btn" style="margin-right: 10px">重置本关卡</button>
     <button disabled id="next-barrier-btn" style="margin-right: 10px">下一个关卡</button>
@@ -42,9 +38,6 @@
 </div>
 <script src="index.js"></script>
 <script>
-  const importBtn = document.getElementById("import-btn");
-  const exportBtn = document.getElementById("export-btn");
-
   let current = 0;
 
   const configs = [
@@ -60,7 +53,7 @@
         { count: 7, leftStart: 50, topStart: 350 },
         { count: 10, leftStart: 50, topStart: 400 }
       ],
-      barrier: 1,
+      barrier: 0,
       initial: {
         width: 900,
         height: 500,
@@ -80,7 +73,7 @@
         { count: 7, leftStart: 50, topStart: 350 },
         { count: 5, leftStart: 50, topStart: 400 }
       ],
-      barrier: 2,
+      barrier: 1,
       initial: {
         width: 900,
         height: 500,
@@ -101,7 +94,7 @@
       game._config = configs[current];
       game.initialize();
       game.closeModal();
-      document.getElementById("current-barrier-count").innerText = `当前关卡数：${configs[current].barrier}`;
+      document.getElementById("current-barrier-count").innerText = `当前关卡数：${configs[current].barrier + 1}`;
       nextBarrierBtn.disabled = true;
     };
   };
@@ -111,19 +104,29 @@
   };
 
   document.getElementById("save-barrier-btn").onclick = () => {
-    // TODO 保存当前关卡数量
+    localStorage.setItem("game-config", JSON.stringify(configs[current]));
   };
 
   document.getElementById("reset-barrier-btn").onclick = () => {
     game._config = configs[current];
     game.initialize();
     game.closeModal();
-    document.getElementById("current-barrier-count").innerText = `当前关卡数：${configs[current].barrier}`;
+    document.getElementById("current-barrier-count").innerText = `当前关卡数：${configs[current].barrier + 1}`;
     nextBarrierBtn.disabled = true;
   };
 
-  game._config = configs[current];
-  game.initialize();
+  window.onload = () => {
+    const config = JSON.parse(localStorage.getItem("game-config"));
+    if (config) {
+      current = config.barrier;
+    }
+
+    game._config = configs[current];
+    game.initialize();
+    game.closeModal();
+    document.getElementById("current-barrier-count").innerText = `当前关卡数：${configs[current].barrier + 1}`;
+    nextBarrierBtn.disabled = true;
+  };
 </script>
 </body>
 </html>
